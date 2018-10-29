@@ -1,0 +1,139 @@
+.floating-menu-top{
+    background-color:black;
+    width:100%;
+    position:fixed;
+    top:3px;
+    float:left;
+    height:75px;
+    min-width: 375px;
+}
+.floating-menu-top h1{
+    margin:0;
+    padding:0;
+    top:16px;
+    left:50px;
+    color:red;
+}
+.floating-menu-top form{
+    position:absolute;
+    top:22px;
+    right:8px;
+}
+.floating-menu-bottom{
+    background-color:black;
+    width:100%;
+    position: fixed;
+    bottom:3px;
+    height: 15px;
+    float:left;
+    padding:1px;
+    margin:0;
+}
+body{
+    background-image:url(https://flavorwire.files.wordpress.com/2011/06/6-state1.jpg);
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+main{
+    margin-top:80px;
+}
+#logoimg{
+    width:7px;
+}
+.movie-list{
+    list-style:none;
+    margin-left: 7%;
+    margin-right: 7%;
+}
+.Avatar {
+    background-color: red;
+    text-align: center;  
+    float:left;
+    width: 13.5%;
+    outline: 3px solid red;
+    position: relative;
+    padding: 3px;
+    margin: 5px;
+    text-shadow: -1.5px 0 2px black, 0 1.5px 2px black, 1.5px 0 2px black, 0 -1.5px 2px black;
+}
+.Avatar img{
+    width:100%;
+}
+
+.Avatar p1{
+  position:absolute;
+  bottom:3px;
+  left:3px;
+  color: red;
+  font-size: medium;
+  margin: 3px;
+  padding: 3px;
+}
+.Avatar p2{
+  position:absolute;
+  bottom:3px;
+  right:3px;
+  color: red;
+  font-size: medium;
+  margin: 3px;
+  padding: 3px;
+}
+.previews{
+    background-color:black;
+    outline:3px solid red;
+    width:62%;
+    min-height:60%;
+    position:fixed;
+    left:20%;
+    top:100px;
+    float:left;
+    text-align: center;
+    text-shadow: -1.5px 0 2px black, 0 1.5px 2px black, 1.5px 0 2px black, 0 -1.5px 2px black;
+}
+.previews img{
+    width:100%;
+}
+.previews h2{
+    position:absolute;
+    top:8px;
+    left:12px;
+    color:red;
+    padding:0;
+    margin:0;
+}
+.previews .closebtn{
+    position:absolute;
+    top:5px;
+    right:12px;
+    font-size: large;
+    color:red;
+    margin:0;
+}
+.previews p1{
+    position:absolute;
+    bottom:20px;
+    left:8px;
+    color:red;
+    text-size:medium;
+}
+.button1{
+    border-radius: 8px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: black;
+    border:2px solid red;
+    color:red;
+}
+.button1:hover{
+    color:black;
+    background-color: red;
+}
+p{
+    text-shadow: -1.5px 0 2px black, 0 1.5px 2px black, 1.5px 0 2px black, 0 -1.5px 2px black;
+    margin-left: 100px;
+    margin-right: 100px;
+    text-align: center;
+    color:red;
+    text-size:medium;
+}
