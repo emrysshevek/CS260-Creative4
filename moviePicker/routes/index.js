@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var request = require("request");
 
 
 /* GET home page. */
@@ -14,14 +15,21 @@ var imageurl = "https://image.tmdb.org/t/p/w500";
 router.get('/checkKey', function(req, res, next) {
     var jsonResult;
     var userkey = req.query['k'];
+    // console.log(userkey);
+    // console.log(keys.indexOf(userkey));
     if (keys.indexOf(userkey) != -1) {
         jsonResult = movieDisplay[keys.indexOf(userkey)];
         res.status(200).json(jsonResult);
     }
     else {
         keys.push(userkey);
+        // console.log(keys);
         var url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=7678944848f7b822b6b11c2978c94dea";
+        request.get(url, function(err, res, body) {
+            console.log(body);
+        })
         $.getJSON(url, function(response) {
+            console.log(response);
             var movielist = [];
             var moviestoqueue = [];
             for (x in response["data"]["results"]) {

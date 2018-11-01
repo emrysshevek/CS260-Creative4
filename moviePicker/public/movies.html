@@ -21,7 +21,7 @@
 
         <div class="mainBody">
             <nav class=" navbar navbar-expand-lg navbar-dark bg-dark ">
-                <a class="navbar-brand " href="# ">MOVIE NIGHT</a>
+                <a class="navbar-brand " href=" ">MOVIE NIGHT</a>
                 <button class="navbar-toggler " type="button " data-toggle="collapse " data-target="#navbarSupportedContent " aria-controls="navbarSupportedContent " aria-expanded="false " aria-label="Toggle navigation "><span class="navbar-toggler-icon "></span></button>
 
                 <div class="collapse navbar-collapse " id="navbarSupportedContent ">
@@ -41,12 +41,11 @@
                     <div class="col-sm ">
                         <form>
                             <div class="form-group ">
-                                <input type="text " class="form-control " id="exampleInputEmail1 " aria-describedby="emailHelp " placeholder="Search for a Movie Night or start a new one ">
+                                <input ng-model="sessionName" type="text " class="form-control " id="exampleInputEmail1 " aria-describedby="emailHelp " placeholder="Search for a Movie Night or start a new one ">
                             </div>
                             <center>
                                 <span>
-                                <a href="#/movie "><button type="submit " class="btn btn-danger " ng-click="onup() ">Join</button></a>
-                                <a href="#/movie "><button type="submit " class="btn btn-danger " ng-click="onup() ">Create</button></a>
+                                <button type="submit " class="btn btn-danger " ng-click="startSession() ">Start</button>
                                 </span>
                             </center>
                         </form>
