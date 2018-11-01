@@ -1,27 +1,83 @@
 var express = require('express');
 var router = express.Router();
 
-var movieNights = [];
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    console.log("sending main");
     res.sendFile('movies.html', { root: 'public' });
 });
-
-router.get('/join', function(req, res, next) {
-    var movieNight = req.query["q"];
-    if (movieNights.indexOf(movieNight) > 0) {
-        // do something
+var keys = [];
+var movieDisplay = [];
+var movieQueue = [];
+var pagecount = [];
+var imageurl = "https://image.tmdb.org/t/p/w500";
+router.get('/checkKey', function(req, res, next) {
+    var jsonResult;
+    var userkey = req.query['k'];
+    if (keys.indexOf(userkey) != -1) {
+        jsonResult = movieDisplay[keys.indexOf(userkey)];
+        res.status(200).json(jsonResult);
     }
-})
-
-router.post('/create', function(req, res) {
-    console.log("In Create Session");
-    console.log(req.body);
-    movieNights.push(req.body.session);
-    console.log("Movie Nights:" + movieNights.toString());
-    res.send('{"success" : "Updated Successfully", "status" : 200}');
+    else {
+        keys.push(userkey);
+        var url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=7678944848f7b822b6b11c2978c94dea";
+        $.getJSON(url, function(response) {
+            var movielist = [];
+            var moviestoqueue = [];
+            for (x in response["data"]["results"]) {
+                var imgposter = imageurl + response["data"]["results"][x]["poster_path"]
+                var imgbkgrnd = imageurl + response["data"]["results"][x]["backdrop_path"]
+                if (x < 12) {
+                    movielist.push({
+                        title: response["data"]["results"][x]["title"],
+                        about: response["data"]["results"][x]["overview"],
+                        upvotes: 0,
+                        nameimage: imgposter,
+                        backgrdimage: imgbkgrnd,
+                        vote: response["data"]["results"][x]["vote_average"]
+                    });
+                }
+                else {
+                    moviestoqueue.push({
+                        title: response["data"]["results"][x]["title"],
+                        about: response["data"]["results"][x]["overview"],
+                        upvotes: 0,
+                        nameimage: imgposter,
+                        backgrdimage: imgbkgrnd,
+                        vote: response["data"]["results"][x]["vote_average"]
+                    });
+                }
+            }
+            movieDisplay.push(movielist);
+            movieQueue.push(moviestoqueue);
+            pagecount.push(1);
+            res.status(200).json(movielist);
+        });
+    }
 });
+router.get("/like", function(req, res, next) {
+    var userkey = req.jquery['k'];
+    var moviename = req.jquery['n'];
+    var index = keys.indexOf(userkey);
+    for (i in movieDisplay[index]) {
+        if (movieDisplay[index][i]["title"] == moviename) {
+            movieDisplay[index][i]["upvotes"]++;
+        }
+    }
+    res.status(200).json(movieDisplay[index]);
+});
+router.get("/delete", function(req, res, next) {
+    var userkey = req.jquery['k'];
+    var moviename = req.jquery['n'];
+    var index = keys.indexOf(userkey);
+    for (i in movieDisplay[index]) {
+        if (movieDisplay[index][i]["title"] == moviename) {
+            movieDisplay[index][i] = movieQueue[index][0];
+            movieQueue[index].splice(0, 1);
+        }
+    }
+    if (movieQueue[index].size() < 3) {
 
+    }
+});
 module.exports = router;
