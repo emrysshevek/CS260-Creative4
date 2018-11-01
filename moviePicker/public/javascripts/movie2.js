@@ -43,13 +43,13 @@ app.controller('MainCtrl',
     function($scope, $http, movieFactory) {
         console.log("Main Controller");
         $scope.info = infotext;
-
+        $scope.movies=movieFactory.movies;
         $scope.startSession = function() {
             console.log($scope.sessionName);
             var url = '/checkKey?k=' + $scope.sessionName;
             console.log(url)
             $http.get(url).then(function(response) {
-                console.log(response);
+                $scope.movies=response["data"]
             });
             $scope.sessionName = "";
         };

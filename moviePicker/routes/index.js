@@ -10,6 +10,7 @@ router.get('/', function(req, res, next) {
 var keys = [];
 var movieDisplay = [];
 var movieQueue = [];
+var allmovies=[];
 var pagecount = [];
 var imageurl = "https://image.tmdb.org/t/p/w500";
 router.get('/checkKey', function(req, res, next) {
@@ -22,47 +23,57 @@ router.get('/checkKey', function(req, res, next) {
         res.status(200).json(jsonResult);
     }
     else {
+        console.log("Keys:"+ keys)
         keys.push(userkey);
-        // console.log(keys);
-        var url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=7678944848f7b822b6b11c2978c94dea";
-        request.get(url, function(err, res, body) {
-            console.log(body);
-        })
-        $.getJSON(url, function(response) {
-            console.log(response);
-            var movielist = [];
-            var moviestoqueue = [];
-            for (x in response["data"]["results"]) {
-                var imgposter = imageurl + response["data"]["results"][x]["poster_path"]
-                var imgbkgrnd = imageurl + response["data"]["results"][x]["backdrop_path"]
+        console.log(keys);
+        var movielist=[];
+        var options = { method: 'GET',
+            url: 'https://api.themoviedb.org/3/discover/movie',
+            qs: 
+            { page: '1',
+             include_video: 'false',
+             include_adult: 'false',
+             sort_by: 'popularity.desc',
+             language: 'en-US',
+             api_key: '7678944848f7b822b6b11c2978c94dea' },
+            body: '{}' };
+        request(options, function(err, res, body) {
+            
+            var moviestoqueue=[];
+            var response = JSON.parse(body);
+            for (x in response["results"]){
+                console.log("title:"+response["results"][x].title)
+                var imgposter = imageurl + response["results"][x]["poster_path"]
+                var imgbkgrnd = imageurl + response["results"][x]["backdrop_path"]
                 if (x < 12) {
                     movielist.push({
-                        title: response["data"]["results"][x]["title"],
-                        about: response["data"]["results"][x]["overview"],
+                        title: response["results"][x]["title"],
+                        about: response["results"][x]["overview"],
                         upvotes: 0,
                         nameimage: imgposter,
                         backgrdimage: imgbkgrnd,
-                        vote: response["data"]["results"][x]["vote_average"]
+                        vote: response["results"][x]["vote_average"]
                     });
                 }
                 else {
                     moviestoqueue.push({
-                        title: response["data"]["results"][x]["title"],
-                        about: response["data"]["results"][x]["overview"],
+                        title: response["results"][x]["title"],
+                        about: response["results"][x]["overview"],
                         upvotes: 0,
                         nameimage: imgposter,
                         backgrdimage: imgbkgrnd,
-                        vote: response["data"]["results"][x]["vote_average"]
+                        vote: response["results"][x]["vote_average"]
                     });
                 }
             }
+        
             movieDisplay.push(movielist);
             movieQueue.push(moviestoqueue);
             for (i in movielist) allmovies.push(movielist[i]);
             for (i in moviestoqueue) allmovies.push(moviestoqueue[i])
             pagecount.push(1);
-            res.status(200).json(movielist);
-        });
+        })
+        res.status(200).json(movielist);
     }
 });
 router.get("/like", function(req, res, next) {
@@ -87,27 +98,68 @@ router.get("/delete", function(req, res, next) {
         }
     }
     if (movieQueue[index].size() < 3) {
-
+        var options = { method: 'GET',
+            url: 'https://api.themoviedb.org/3/discover/movie',
+            qs: 
+            { page: ++pagecount[index],
+             include_video: 'false',
+             include_adult: 'false',
+             sort_by: 'popularity.desc',
+             language: 'en-US',
+             api_key: '7678944848f7b822b6b11c2978c94dea' },
+            body: '{}' };
+        request(options, function(err, res, body) {
+            var response = JSON.parse(body);
+            for (x in response["results"]){
+                console.log("title:"+response["results"][x].title)
+                var imgposter = imageurl + response["results"][x]["poster_path"]
+                var imgbkgrnd = imageurl + response["results"][x]["backdrop_path"]
+                movieQueue[index].push({
+                    title: response["results"][x]["title"],
+                    about: response["results"][x]["overview"],
+                    upvotes: 0,
+                    nameimage: imgposter,
+                    backgrdimage: imgbkgrnd,
+                    vote: response["results"][x]["vote_average"]
+                });
+                allmovies[index].push({
+                    title: response["results"][x]["title"],
+                    about: response["results"][x]["overview"],
+                    upvotes: 0,
+                    nameimage: imgposter,
+                    backgrdimage: imgbkgrnd,
+                    vote: response["results"][x]["vote_average"]
+                });
+            }
+        })
     }
+    
     res.status(200).json(movieDisplay[index]);
 });
 router.get('/find', function(req, res, next) {
     var moviename = req.jquery['n'];
-    var url = "https://api.themoviedb.org/3/search/movie?api_key=7678944848f7b822b6b11c2978c94dea&query=" + moviename;
+    //var url = "https://api.themoviedb.org/3/search/movie?api_key=7678944848f7b822b6b11c2978c94dea&query=" + moviename;
     var searchmovies = [];
-    $.getJSON(url, function(response) {
-        for (x in response["data"]["results"]) {
-            if (response["data"]["results"][x]["popularity"] > 3) {
-                var imgposter = imageurl + response["data"]["results"][x]["poster_path"]
-                var imgbkgrnd = imageurl + response["data"]["results"][x]["backdrop_path"]
+    var options = { method: 'GET',
+            url: 'https://api.themoviedb.org/3/search/movie',
+            qs: 
+            { query:moviename,
+             api_key: '7678944848f7b822b6b11c2978c94dea' },
+            body: '{}' };
+    request(options, function(err, res, body) {
+        var response = JSON.parse(body);
+        for (x in response["results"]) {
+            if (response["results"][x]["popularity"] > 3) {
+                var imgposter = imageurl + response["results"][x]["poster_path"]
+                var imgbkgrnd = imageurl + response["results"][x]["backdrop_path"]
                 searchmovies.push({
-                    title: response["data"]["results"][x]["title"],
-                    about: response["data"]["results"][x]["overview"],
+                    title: response["results"][x]["title"],
+                    about: response["results"][x]["overview"],
                     upvotes: 0,
                     nameimage: imgposter,
                     backgrdimage: imgbkgrnd,
-                    vote: response["data"]["results"][x]["vote_average"],
-                    id: response["data"]["results"][x]["id"]
+                    vote: response["results"][x]["vote_average"],
+                    id: response["results"][x]["id"]
                 });
             }
         }
@@ -120,9 +172,10 @@ router.get('/addMovie', function(req, res, next) {
     var index = keys.indexOf(userkey);
     var movie=[]
     var url="https://api.themoviedb.org/3/movie/"+movieId+"?api_key=7678944848f7b822b6b11c2978c94dea";
-    $.getJSON(url, function(response) {
-        var imgposter = imageurl + response["data"]["poster_path"]
-        var imgbkgrnd = imageurl + response["data"]["backdrop_path"]
+    request.get(url, function(err, res, body) {
+        var response = JSON.parse(body);
+        var imgposter = imageurl + response["data"]["poster_path"];
+        var imgbkgrnd = imageurl + response["data"]["backdrop_path"];
         movie.push({
             title: response["data"]["title"],
             about: response["data"]["overview"],
@@ -133,8 +186,15 @@ router.get('/addMovie', function(req, res, next) {
             id: movieId
         });
     });
-    for (var i = movieDisplay.length - 1; i >= 0; --i) {
-        if
+    while(true){
+        for (var i = movieDisplay[index].length - 1; i >= 0; --i) {
+            if(movieDisplay[index][i].upvotes<movie[0].upvotes){
+                movieQueue.splice(0,0,movieDisplay[index][i]);
+                movieDisplay[index][i]=movie[0];
+                res.status(200).json(movieDisplay[index]);
+            }
+        }
+        movie[0].upvotes++;
     }
-})
+});
 module.exports = router;
