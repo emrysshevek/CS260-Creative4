@@ -44,18 +44,14 @@ app.controller('MainCtrl',
         console.log("Main Controller");
         $scope.info = infotext;
 
-        $scope.createSession = function() {
-            $scope.session = "Mason's Movie Night";
-            var formData = { session: $scope.session };
-            console.log(formData);
-            var url = '/create';
-            $http({
-                url: url,
-                method: "POST",
-                data: formData
-            }).then(function(response) {
+        $scope.startSession = function() {
+            console.log($scope.sessionName);
+            var url = '/checkKey?k=' + $scope.sessionName;
+            console.log(url)
+            $http.get(url).then(function(response) {
                 console.log(response);
             });
+            $scope.sessionName = "";
         };
 
         $scope.check = function() {
