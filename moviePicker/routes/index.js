@@ -108,7 +108,25 @@ router.get('/find', function(req, res, next) {
 })
 router.get('/addMovie', function(req, res, next) {
     var userkey = req.jquery['k'];
-    var movienId = req.jquery['id'];
+    var movieId = req.jquery['id'];
     var index = keys.indexOf(userkey);
+    var movie=[]
+    var url="https://api.themoviedb.org/3/movie/"+movieId+"?api_key=7678944848f7b822b6b11c2978c94dea";
+    $.getJSON(url, function(response) {
+        var imgposter = imageurl + response["data"]["poster_path"]
+        var imgbkgrnd = imageurl + response["data"]["backdrop_path"]
+        movie.push({
+            title: response["data"]["title"],
+            about: response["data"]["overview"],
+            upvotes: 2,
+            nameimage: imgposter,
+            backgrdimage: imgbkgrnd,
+            vote: response["data"]["vote_average"],
+            id: movieId
+        });
+    });
+    for (var i = movieDisplay.length - 1; i >= 0; --i) {
+        if
+    }
 })
 module.exports = router;
