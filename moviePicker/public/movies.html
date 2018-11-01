@@ -4,7 +4,6 @@
 <head>
     <title>Find Movie</title>
     <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.js"></script>-->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
     <script src="javascripts/movie2.js"></script>
@@ -19,7 +18,8 @@
     <ui-view></ui-view>
 
     <script type="text/ng-template " id="/main.html ">
-        <div class="mainBody>
+
+        <div class="mainBody">
             <nav class=" navbar navbar-expand-lg navbar-dark bg-dark ">
                 <a class="navbar-brand " href="# ">MOVIE NIGHT</a>
                 <button class="navbar-toggler " type="button " data-toggle="collapse " data-target="#navbarSupportedContent " aria-controls="navbarSupportedContent " aria-expanded="false " aria-label="Toggle navigation "><span class="navbar-toggler-icon "></span></button>
@@ -57,32 +57,43 @@
     </script>
 
     <script type="text/ng-template " id="/movie.html ">
-        <div class="movieBody>
-            <ul class="movie-list">
-                <li ng-repeat="movie in moviequeue|orderBy:'-upvotes'">
-                    <div class="Avatar">
-                        <img ng-click="popup(movie)" ng-src='{{movie.nameimage}}' style="cursor:pointer" />
-                        <p1 ng-click="incrementUpvotes(movie)" style="cursor:pointer"><span class="glyphicon glyphicon-thumbs-up"> </p1>
-                            <p2 ng-click="deleteMovie(movie)"style="cursor:pointer"> X</p2>
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
+                    <div class="sidebar-sticky">
+                        <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                        <ul class="nav flex-column">
+                        </ul>
                     </div>
-                </li>
-            </ul>
-            <ul class="movie-list" >
-                <li ng-repeat="preview in moviepopup">
-                    <div class="previews">
-                        <img ng-src="{{preview.movie.backgrdimage}}"/>
-                        <p class="closebtn" ng-click="popdown()" style="cursor:pointer">x</p>
-                        <h2>{{preview.movie.title}}</h1>
-                        <p1>{{preview.movie.about}} <br>RATING: {{preview.movie.vote}}</p1>
-                    </div>
-                </li>
-            </ul>
+                </nav>
+                <div class="col">
+                    <ul class="movie-list " ng-init="init() ">
+                        <li ng-repeat="movie in moviequeue|orderBy: '-upvotes' ">
+                            <div class="Avatar ">
+                                <img ng-click="popup(movie) " ng-src='{{movie.nameimage}}' style="cursor:pointer " />
+                                <p1 ng-click="incrementUpvotes(movie) " style="cursor:pointer "><span class="glyphicon glyphicon-thumbs-up "> </p1>
+                                <p2 ng-click="deleteMovie(movie) "style="cursor:pointer "> X</p2>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="movie-list " >
+                        <li ng-repeat="preview in moviepopup ">
+                            <div class="previews ">
+                                <img ng-src="{{preview.movie.backgrdimage}} "/>
+                                <p class="closebtn " ng-click="popdown() " style="cursor:pointer ">x</p>
+                                <h2>{{preview.movie.title}}</h1>
+                                <p1>{{preview.movie.about}} <br>RATING: {{preview.movie.vote}}</p1>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </script>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js " integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo " crossorigin="anonymous "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js " integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49 " crossorigin="anonymous "></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js " integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy " crossorigin="anonymous "></script>
 </body>
 
 </html>
