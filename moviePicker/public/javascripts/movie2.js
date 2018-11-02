@@ -4,6 +4,7 @@ var movieurl = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.d
 var pagenum = 1;
 var infotext = "IT'S MOVIE NIGHT, and you haven't yet decided on a movie, instead of randomly listing off movie names that you have already watch, let us help. Press start and we will give you a list of all movies based on popularity from there, if you decide you like it, you can press the thumbs up if you want to move it's position closer to the top, the 'x' to have it removed from the list, or the movie picture to view a description and other facts. At any time, you can press the start button to start the process over again. Enjoy!"
 var app = angular.module('app', ['ui.router']);
+var sessionkey;
 
 app.config(function($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist(['**']);
@@ -30,7 +31,8 @@ app.config([
     }
 ]);
 
-app.factory("movieFactory", [function() {
+app.factory("movieFactory", [function($http) {
+
     var o = {
         movies: [],
         moviestoqueue: [],
@@ -44,24 +46,30 @@ app.controller('MainCtrl',
     function($scope, $http, movieFactory) {
         console.log("Main Controller");
         $scope.info = infotext;
-
+        $scope.moviequeue = movieFactory.movies;
         $scope.startSession = function() {
-            // console.log($scope.sessionName);
-            movieFactory.session = $scope.sessionName;
-            var url = '/checkKey?k=' + movieFactory.session;
-            // console.log(url)
+            console.log($scope.sessionName);
+            sessionkey = $scope.sessionName;
+            var url = '/checkKey?k=' + sessionkey;
+            console.log(url);
             $http.get(url).then(function(response) {
-                // console.log("Server Response");
-                movieFactory.movies = response["data"]
+                console.log(response)
+                $scope.moviequeue = response["data"];
             });
+            if ($scope.moviequeue.length < 10) {
+                $http.get(url).then(function(response) {
+                    console.log(response)
+                    $scope.moviequeue = response["data"];
+                });
+            }
             $scope.sessionName = "";
+            $scope.info = "";
         };
 
         $scope.check = function() {
             console.log("checking")
             console.log($scope.moviequeue)
-            console.log($scope.movieToqueue)
-            console.log($scope.moviepopup)
+
         };
     }
 );

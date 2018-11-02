@@ -2,13 +2,23 @@ var express = require('express');
 var router = express.Router();
 var request = require("request");
 
+var keys = [];
+var movieDisplay = [];
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.sendFile('movies.html', { root: 'public' });
+    console.log("in /")
+    var userkey=req.query['k'];
+    if (keys.indexOf(userkey)!=-1){
+        console.log("keys:"+keys);
+        var index=keys.indexOf(userkey);
+        var jsonResult = movieDisplay[index];
+        console.log("sending:"+jsonResult);
+        res.status(200).json(jsonResult);
+    }
 });
-var keys = [];
-var movieDisplay = [];
+
 var movieQueue = [];
 var allmovies=[];
 var pagecount = [];
@@ -19,7 +29,10 @@ router.get('/checkKey', function(req, res, next) {
     // console.log(userkey);
     // console.log(keys.indexOf(userkey));
     if (keys.indexOf(userkey) != -1) {
-        jsonResult = movieDisplay[keys.indexOf(userkey)];
+        console.log("keys:"+keys)
+        var index=keys.indexOf(userkey)
+        jsonResult = movieDisplay[index];
+        console.log("sending:"+jsonResult)
         res.status(200).json(jsonResult);
     }
     else {
@@ -37,12 +50,10 @@ router.get('/checkKey', function(req, res, next) {
              language: 'en-US',
              api_key: '7678944848f7b822b6b11c2978c94dea' },
             body: '{}' };
-        request(options, function(err, res, body) {
-            
+        request(options, function(err, resp, body) {
             var moviestoqueue=[];
             var response = JSON.parse(body);
             for (x in response["results"]){
-                console.log("title:"+response["results"][x].title)
                 var imgposter = imageurl + response["results"][x]["poster_path"]
                 var imgbkgrnd = imageurl + response["results"][x]["backdrop_path"]
                 if (x < 12) {
@@ -72,8 +83,11 @@ router.get('/checkKey', function(req, res, next) {
             for (i in movielist) allmovies.push(movielist[i]);
             for (i in moviestoqueue) allmovies.push(moviestoqueue[i])
             pagecount.push(1);
-        })
-        res.status(200).json(movielist);
+        });
+        index=keys.indexOf(userkey);
+        jsonResult = movieDisplay[index];
+        console.log("sending:"+jsonResult);
+        res.status(200).json(jsonResult);
     }
 });
 router.get("/like", function(req, res, next) {
