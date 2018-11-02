@@ -46,7 +46,6 @@
                             <center>
                                 <span>
                                 <a href="#/movie"><button type="submit " class="btn btn-danger " ng-click="startSession() ">Start</button></a>
-                                <button type="submit " class="btn btn-danger " ng-click="check() ">check</button>
                                 </span>
                             </center>
                         </form>
@@ -61,8 +60,13 @@
             <div class="row">
                 <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
                     <div class="sidebar-sticky">
-                        <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                        <form name="formName" ng-keyup="search(formName)"
+                        <input class="form-control"  placeholder="Search" aria-label="Search" ng-model="formName.name">
+                        </form>
                         <ul class="nav flex-column">
+                        <li ng-repeat='movie in searchmovies'>
+                            <p ng-click="addMovie(movie)" style="cursor:pointer">{{movie.title}}</p>
+                        </li>
                         </ul>
                     </div>
                 </nav>
@@ -76,6 +80,7 @@
                             </div>
                         </li>
                     </ul>
+                    <p>{{sessionkey}}</p>
                     <ul class="movie-list " >
                         <li ng-repeat="preview in moviepopup ">
                             <div class="previews ">

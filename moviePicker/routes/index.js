@@ -203,7 +203,7 @@ router.get('/addMovie', function(req, res, next) {
             if(movieDisplay[index][i].upvotes<movie[0].upvotes){
                 movieQueue.splice(0,0,movieDisplay[index][i]);
                 movieDisplay[index][i]=movie[0];
-                res.status(200).json(movieDisplay[index]);
+                return res.status(200).json(movieDisplay[index]);
             }
         }
         movie[0].upvotes++;

@@ -102,121 +102,71 @@
 }
 
 .Avatar img {
-
     width: 100%;
 
 }
 
 .Avatar p1 {
-
     position: absolute;
-
     bottom: 3px;
-
     left: 3px;
-
     color: red;
-
     font-size: medium;
-
     margin: 3px;
-
     padding: 3px;
-
 }
 
 .Avatar p2 {
-
     position: absolute;
-
     bottom: 3px;
-
     right: 3px;
-
     color: red;
-
     font-size: medium;
-
     margin: 3px;
-
     padding: 3px;
-
 }
 
 .previews {
-
     background-color: black;
-
     outline: 3px solid red;
-
     width: 62%;
-
     min-height: 60%;
-
     position: fixed;
-
     left: 20%;
-
     top: 100px;
-
     float: left;
-
     text-align: center;
-
     text-shadow: -1.5px 0 2px black, 0 1.5px 2px black, 1.5px 0 2px black, 0 -1.5px 2px black;
-
 }
 
 .previews img {
-
     width: 100%;
-
 }
 
 .previews h2 {
-
     position: absolute;
-
     top: 8px;
-
     left: 12px;
-
     color: red;
-
     padding: 0;
-
     margin: 0;
-
 }
 
 .previews .closebtn {
-
     position: absolute;
-
     top: 5px;
-
     right: 12px;
-
     font-size: large;
-
     color: red;
-
     margin: 0;
-
 }
 
 .previews p1 {
-
     position: absolute;
-
     bottom: 20px;
-
     left: 8px;
-
     color: red;
-
     text-size: medium;
-
 }
 
 /*.button1 {*/
@@ -224,6 +174,8 @@
 /*    border-radius: 8px;*/
 
 /*    -webkit-transition-duration: 0.4s;*/
+
+
 
 /*    Safari transition-duration: 0.4s;*/
 

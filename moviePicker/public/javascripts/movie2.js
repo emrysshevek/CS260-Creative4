@@ -35,9 +35,9 @@ app.factory("movieFactory", [function($http) {
 
     var o = {
         movies: [],
-        moviestoqueue: [],
         moviepopup: [],
-        session: ""
+        session: "",
+        searchmovies:[]
     };
     return o;
 }]);
@@ -48,10 +48,11 @@ app.controller('MainCtrl',
         $scope.info = infotext;
         $scope.moviequeue=movieFactory.movies;
         $scope.moviepopup=movieFactory.moviepopup;
-        
+        $scope.keyForSession=movieFactory.session;
         $scope.startSession = function() {
             console.log($scope.sessionName);
             sessionkey = $scope.sessionName;
+            $scope.keyForSession=$scope.sessionName;
             var url = '/checkKey?k=' + sessionkey;
             console.log(url);
             $http.get(url).then(function(response) {
@@ -85,9 +86,10 @@ app.controller('MainCtrl',
 app.controller('MovieCtrl',
     function($scope, $http, movieFactory) {
         console.log("Movie state");
-
+        $scope.searchmovies=movieFactory.searchmovies;
         $scope.movieQueue = movieFactory.movies;
         $scope.moviepopup=movieFactory.moviepopup;
+        $scope.keyForSession=movieFactory.session;
         // console.log(movieFactory.session);
         // $scope.moviequeue = movieFactory.movies;
         // $scope.movieToqueue = movieFactory.moviestoqueue;
@@ -102,6 +104,10 @@ app.controller('MovieCtrl',
                 console.log("queue:" + $scope.movieQueue);
             });
             $scope.test = "MASON";
+            if($scope.movieQueue.length<5){
+                console.log("retry")
+                $scope.init();
+            }
         };
 
         $scope.init = function() {
@@ -124,17 +130,31 @@ app.controller('MovieCtrl',
             var url = '/like?k=' + sessionkey+"&n="+movie.title;
             $http.get(url).then(function(response) {
                 console.log(response)
-                $scope.moviequeue=response["data"];
+                $scope.movieQueue=response["data"];
             });
         };
 
         $scope.deleteMovie = function(movie) {
+            console.log("sessionkey:" +sessionkey+", "+$scope.keyForSession)
             var url = '/delete?k=' + sessionkey+"&n="+movie.title;
             $http.get(url).then(function(response) {
                 console.log(response)
-                $scope.moviequeue=response["data"];
+                $scope.movieQueue=response["data"];
             });
         };
+        $scope.search=function(movie){
+            var url='/find?n='+$scope.movieSearchName;
+            $http.get(url).then(function(response){
+                $scope.searchmovies=response.data;
+            })
+        }
+        $scope.addMovie=function(movie){
+            var url='/addMovie?k='+sessionkey+"&id="+movie.id;
+            $http.get(url).then(function(response) {
+                console.log(response)
+                $scope.movieQueue=response["data"];
+            });
+        }
     });
 
 app.directive('avatar', avatarDirective);
