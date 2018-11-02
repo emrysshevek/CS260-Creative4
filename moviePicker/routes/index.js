@@ -26,8 +26,6 @@ var imageurl = "https://image.tmdb.org/t/p/w500";
 router.get('/checkKey', function(req, res, next) {
     var jsonResult;
     var userkey = req.query['k'];
-    // console.log(userkey);
-    // console.log(keys.indexOf(userkey));
     if (keys.indexOf(userkey) != -1) {
         console.log("keys:"+keys)
         var index=keys.indexOf(userkey)
@@ -91,8 +89,8 @@ router.get('/checkKey', function(req, res, next) {
     }
 });
 router.get("/like", function(req, res, next) {
-    var userkey = req.jquery['k'];
-    var moviename = req.jquery['n'];
+    var userkey = req.query['k'];
+    var moviename = req.query['n'];
     var index = keys.indexOf(userkey);
     for (i in movieDisplay[index]) {
         if (movieDisplay[index][i]["title"] == moviename) {
@@ -102,16 +100,20 @@ router.get("/like", function(req, res, next) {
     res.status(200).json(movieDisplay[index]);
 });
 router.get("/delete", function(req, res, next) {
-    var userkey = req.jquery['k'];
-    var moviename = req.jquery['n'];
+    console.log("deleting")
+    var userkey = req.query['k'];
+    var moviename = req.query['n'];
+    console.log("key:"+userkey+" name:"+moviename)
     var index = keys.indexOf(userkey);
+    console.log("keys:"+keys+" index:"+index)
     for (i in movieDisplay[index]) {
         if (movieDisplay[index][i]["title"] == moviename) {
             movieDisplay[index][i] = movieQueue[index][0];
+            console.log(movieDisplay[index][i]["title"]);
             movieQueue[index].splice(0, 1);
         }
     }
-    if (movieQueue[index].size() < 3) {
+    if (movieQueue[index].length < 3) {
         var options = { method: 'GET',
             url: 'https://api.themoviedb.org/3/discover/movie',
             qs: 
@@ -136,22 +138,13 @@ router.get("/delete", function(req, res, next) {
                     backgrdimage: imgbkgrnd,
                     vote: response["results"][x]["vote_average"]
                 });
-                allmovies[index].push({
-                    title: response["results"][x]["title"],
-                    about: response["results"][x]["overview"],
-                    upvotes: 0,
-                    nameimage: imgposter,
-                    backgrdimage: imgbkgrnd,
-                    vote: response["results"][x]["vote_average"]
-                });
             }
         })
     }
-    
     res.status(200).json(movieDisplay[index]);
 });
 router.get('/find', function(req, res, next) {
-    var moviename = req.jquery['n'];
+    var moviename = req.query['n'];
     //var url = "https://api.themoviedb.org/3/search/movie?api_key=7678944848f7b822b6b11c2978c94dea&query=" + moviename;
     var searchmovies = [];
     var options = { method: 'GET',
@@ -181,8 +174,8 @@ router.get('/find', function(req, res, next) {
     res.status(200).json(searchmovies);
 })
 router.get('/addMovie', function(req, res, next) {
-    var userkey = req.jquery['k'];
-    var movieId = req.jquery['id'];
+    var userkey = req.query['k'];
+    var movieId = req.query['id'];
     var index = keys.indexOf(userkey);
     var movie=[]
     var url="https://api.themoviedb.org/3/movie/"+movieId+"?api_key=7678944848f7b822b6b11c2978c94dea";

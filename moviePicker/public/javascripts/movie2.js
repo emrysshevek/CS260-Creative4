@@ -46,6 +46,8 @@ app.controller('MainCtrl',
         console.log("Main Controller");
         $scope.info = infotext;
         $scope.moviequeue=movieFactory.movies;
+        $scope.moviepopup=movieFactory.moviepopup;
+        
         $scope.startSession = function() {
             console.log($scope.sessionName);
             sessionkey=$scope.sessionName;
@@ -77,8 +79,7 @@ app.controller('MovieCtrl',
     function($scope, $http, movieFactory) {
         console.log("Movie state");
         $scope.moviequeue = movieFactory.movies;
-        $scope.movieToqueue = movieFactory.moviestoqueue;
-        $scope.moviepopup = movieFactory.moviepopup;
+        $scope.moviepopup=movieFactory.moviepopup;
         console.log($scope.moviequeue);
 
         $scope.init = function() {
@@ -86,32 +87,10 @@ app.controller('MovieCtrl',
             $scope.info = ""
             $scope.moviequeue = [];
             $scope.movieToqueue = [];
-            var url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=7678944848f7b822b6b11c2978c94dea";
+            var url = '/checkKey?k=' + sessionkey;
             $http.get(url).then(function(response) {
-                for (x in response["data"]["results"]) {
-                    var imgposter = imageurl + response["data"]["results"][x]["poster_path"]
-                    var imgbkgrnd = imageurl + response["data"]["results"][x]["backdrop_path"]
-                    if (x < 12) {
-                        $scope.moviequeue.push({
-                            title: response["data"]["results"][x]["title"],
-                            about: response["data"]["results"][x]["overview"],
-                            upvotes: 0,
-                            nameimage: imgposter,
-                            backgrdimage: imgbkgrnd,
-                            vote: response["data"]["results"][x]["vote_average"]
-                        });
-                    }
-                    else {
-                        $scope.movieToqueue.push({
-                            title: response["data"]["results"][x]["title"],
-                            about: response["data"]["results"][x]["overview"],
-                            upvotes: 0,
-                            nameimage: imgposter,
-                            backgrdimage: imgbkgrnd,
-                            vote: response["data"]["results"][x]["vote_average"]
-                        });
-                    }
-                }
+                console.log(response)
+                $scope.moviequeue=response["data"];
             });
             console.log($scope.moviequeue);
             $("#info").html = "";
@@ -121,8 +100,7 @@ app.controller('MovieCtrl',
             console.log("in pop up")
             console.log(movie)
             $scope.moviepopup.push({
-                movie,
-                id: "hello"
+                movie
             })
         };
 
@@ -131,36 +109,19 @@ app.controller('MovieCtrl',
         };
 
         $scope.incrementUpvotes = function(movie) {
-            movie.upvotes++;
+            var url = '/like?k=' + sessionkey+"&n="+movie.title;
+            $http.get(url).then(function(response) {
+                console.log(response)
+                $scope.moviequeue=response["data"];
+            });
         };
 
         $scope.deleteMovie = function(movie) {
-            movie.upvotes = 0;
-            movie.title = $scope.movieToqueue[0].title;
-            movie.about = $scope.movieToqueue[0].about;
-            movie.nameimage = $scope.movieToqueue[0].nameimage;
-            movie.backgrdimage = $scope.movieToqueue[0].backgrdimage;
-            movie.vote = $scope.movieToqueue[0].vote;
-            $scope.movieToqueue.splice(0, 1);
-            if ($scope.movieToqueue.length < 3) {
-                pagenum++;
-                var url = movieurl + apiKey + "&page=" + pagenum;
-                $http.get(url).then(function(response) {
-                    console.log(response);
-                    for (x in response["data"]["results"]) {
-                        var imgposter = imageurl + response["data"]["results"][x]["poster_path"]
-                        var imgbkgrnd = imageurl + response["data"]["results"][x]["backdrop_path"]
-                        $scope.movieToqueue.push({
-                            title: response["data"]["results"][x]["title"],
-                            about: response["data"]["results"][x]["overview"],
-                            nameimage: imgposter,
-                            backgrdimage: imgbkgrnd,
-                            upvotes: 0,
-                            vote: response["data"]["results"][x]["vote_average"]
-                        });
-                    }
-                });
-            }
+            var url = '/delete?k=' + sessionkey+"&n="+movie.title;
+            $http.get(url).then(function(response) {
+                console.log(response)
+                $scope.moviequeue=response["data"];
+            });
         };
     });
 
