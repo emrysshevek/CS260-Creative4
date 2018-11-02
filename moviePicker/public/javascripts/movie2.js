@@ -34,7 +34,8 @@ app.factory("movieFactory", [function() {
     var o = {
         movies: [],
         moviestoqueue: [],
-        moviepopup: []
+        moviepopup: [],
+        session: ""
     };
     return o;
 }]);
@@ -43,13 +44,15 @@ app.controller('MainCtrl',
     function($scope, $http, movieFactory) {
         console.log("Main Controller");
         $scope.info = infotext;
-        $scope.movies=movieFactory.movies;
+
         $scope.startSession = function() {
-            console.log($scope.sessionName);
-            var url = '/checkKey?k=' + $scope.sessionName;
-            console.log(url)
+            // console.log($scope.sessionName);
+            movieFactory.session = $scope.sessionName;
+            var url = '/checkKey?k=' + movieFactory.session;
+            // console.log(url)
             $http.get(url).then(function(response) {
-                $scope.movies=response["data"]
+                // console.log("Server Response");
+                movieFactory.movies = response["data"]
             });
             $scope.sessionName = "";
         };
@@ -66,45 +69,25 @@ app.controller('MainCtrl',
 app.controller('MovieCtrl',
     function($scope, $http, movieFactory) {
         console.log("Movie state");
-        $scope.moviequeue = movieFactory.movies;
-        $scope.movieToqueue = movieFactory.moviestoqueue;
-        $scope.moviepopup = movieFactory.moviepopup;
-        console.log($scope.moviequeue);
+        $scope.movieQueue = [];
+        // console.log(movieFactory.session);
+        // $scope.moviequeue = movieFactory.movies;
+        // $scope.movieToqueue = movieFactory.moviestoqueue;
+        // $scope.moviepopup = movieFactory.moviepopup;
+        // console.log($scope.moviequeue);
+
+        $scope.refresh = function() {
+            var url = '/checkKey?k=' + movieFactory.session;
+            $http.get(url).then(function(response) {
+                // console.log("Server Response");
+                $scope.movieQueue = response.data;
+                console.log("queue:");
+                console.log($scope.movieQueue);
+            });
+        };
 
         $scope.init = function() {
-            console.log("init");
-            $scope.info = ""
-            $scope.moviequeue = [];
-            $scope.movieToqueue = [];
-            var url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=7678944848f7b822b6b11c2978c94dea";
-            $http.get(url).then(function(response) {
-                for (x in response["data"]["results"]) {
-                    var imgposter = imageurl + response["data"]["results"][x]["poster_path"]
-                    var imgbkgrnd = imageurl + response["data"]["results"][x]["backdrop_path"]
-                    if (x < 12) {
-                        $scope.moviequeue.push({
-                            title: response["data"]["results"][x]["title"],
-                            about: response["data"]["results"][x]["overview"],
-                            upvotes: 0,
-                            nameimage: imgposter,
-                            backgrdimage: imgbkgrnd,
-                            vote: response["data"]["results"][x]["vote_average"]
-                        });
-                    }
-                    else {
-                        $scope.movieToqueue.push({
-                            title: response["data"]["results"][x]["title"],
-                            about: response["data"]["results"][x]["overview"],
-                            upvotes: 0,
-                            nameimage: imgposter,
-                            backgrdimage: imgbkgrnd,
-                            vote: response["data"]["results"][x]["vote_average"]
-                        });
-                    }
-                }
-            });
-            console.log($scope.moviequeue);
-            $("#info").html = "";
+            $scope.refresh();
         };
 
         $scope.popup = function(movie) {
