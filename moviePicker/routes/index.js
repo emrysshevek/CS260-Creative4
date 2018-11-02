@@ -122,7 +122,7 @@ router.get("/delete", function(req, res, next) {
             },
             body: '{}'
         };
-        request(options, function(err, res, body) {
+        request(options, function(err, resp, body) {
             var response = JSON.parse(body);
             for (x in response["results"]) {
                 console.log("title:" + response["results"][x].title)
@@ -138,9 +138,11 @@ router.get("/delete", function(req, res, next) {
                     id:response["results"][x]["id"]
                 });
             }
+            return res.status(201).json(movieDisplay[index])
         })
     }
-    return res.status(200).json(movieDisplay[index]);
+    else{
+    return res.status(200).json(movieDisplay[index]);}
 });
 router.get('/find', function(req, res, next) {
     var moviename = req.query['n'];

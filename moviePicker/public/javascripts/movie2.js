@@ -85,7 +85,7 @@ app.controller('MainCtrl',
 );
 
 app.controller('MovieCtrl',
-    function($scope, $http, movieFactory) {
+    function($scope, $http, movieFactory,$interval) {
         console.log("Movie state");
         $scope.searchmovies=movieFactory.searchmovies;
         $scope.movieQueue = movieFactory.movies;
@@ -96,7 +96,9 @@ app.controller('MovieCtrl',
         // $scope.movieToqueue = movieFactory.moviestoqueue;
         // $scope.moviepopup = movieFactory.moviepopup;
         // console.log($scope.moviequeue);
-
+        $interval(function(){
+            $scope.refresh();
+        },1000)
         $scope.refresh = function() {
             console.log("sessionkey:" +sessionkey+", "+$scope.keyForSession)
             $scope.keyForSession=sessionkey;
@@ -106,7 +108,7 @@ app.controller('MovieCtrl',
                 $scope.movieQueue = response.data;
                 console.log("queue:" + $scope.movieQueue);
             });
-            $scope.test = "MASON";
+            /*$scope.test = "MASON";
             if(!($scope.movieQueue[0])){
                 $http.get(url).then(function(response) {
                     // console.log("Server Response");
@@ -119,7 +121,7 @@ app.controller('MovieCtrl',
                     start=new Date().getTime();
                 }
                 console.log("retry queue:"+$scope.movieQueue)
-            }
+            }*/
         };
 
         $scope.init = function() {

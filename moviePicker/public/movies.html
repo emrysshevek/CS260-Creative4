@@ -8,6 +8,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
     <script src="javascripts/movie2.js"></script>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="stylesheets/movies.css">
 
@@ -60,7 +61,6 @@
             <nav class=" navbar navbar-header navbar-dark bg-dark ">
                 <a class="navbar-brand " href="#/main">MOVIE NIGHT</a>
                 <p class="navbar-text"><a href="#">Session ID: {{keyForSession}}</a></p>
-                <button class="navbar right" ng-click="refresh()">refresh</button>
             </nav>
                 <form class="inputform">
                     <input type="text" value="" placeholder="Search for Movies" ng-keyup="search()" name="movieSearchName" ng-model="movieSearchName">
@@ -80,7 +80,7 @@
                         <li ng-repeat="movie in movieQueue|orderBy: '-upvotes' ">
                             <div class="Avatar ">
                                 <img ng-click="popup(movie) " ng-src='{{movie.nameimage}}' style="cursor:pointer " />
-                                <p1 ng-click="incrementUpvotes(movie) " style="cursor:pointer ">^ </p1>
+                                <p1 ng-click="incrementUpvotes(movie) " style="cursor:pointer "><i class="fa fa-thumbs-o-up"></i> </p1>
                                 <p2 ng-click="deleteMovie(movie) "style="cursor:pointer "> X</p2>
                             </div>
                         </li>

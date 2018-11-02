@@ -93,11 +93,11 @@
 }
 
 .Avatar {
-    background-color: blue;
+    background-color: #306Ac1;
     text-align: center;
     float: left;
     width: 13.5%;
-    outline: 3px solid blue;
+    outline: 3px solid #306Ac1;
     position: relative;
     padding: 3px;
     margin: 5px;
@@ -111,19 +111,19 @@
 
 .Avatar p1 {
     position: absolute;
-    bottom: -7px;
+    bottom: 5px;
     left: 3px;
-    color: blue;
-    font-size: 35px;
+    color: #306Ac1;
+    font-size: 20px;
     margin: 3px;
     padding: 3px;
 }
 
 .Avatar p2 {
     position: absolute;
-    bottom: 8px;
+    bottom: 5px;
     right: 3px;
-    color: blue;
+    color: #306Ac1;
     font-size: 20px;
     margin: 3px;
     padding: 3px;
@@ -150,7 +150,7 @@
     position: absolute;
     top: 8px;
     left: 12px;
-    color: blue;
+    color: #306Ac1;
     padding: 0;
     margin: 0;
     font-size: 80px;
@@ -169,7 +169,7 @@
     position: absolute;
     bottom: 20px;
     left: 8px;
-    color: blue;
+    color: #306Ac1;
     text-size: medium;
 }
 
