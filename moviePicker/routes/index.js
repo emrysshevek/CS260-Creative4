@@ -25,30 +25,33 @@ var pagecount = [];
 var imageurl = "https://image.tmdb.org/t/p/w500";
 router.get('/checkKey', function(req, res, next) {
     var jsonResult;
+    var movielist=[];
     var userkey = req.query['k'];
+    console.log("Keys:"+ keys+" userkey:"+userkey);
     if (keys.indexOf(userkey) != -1) {
-        console.log("keys:"+keys)
+        console.log("found")
         var index=keys.indexOf(userkey)
         jsonResult = movieDisplay[index];
         console.log("sending:"+jsonResult)
-        res.status(200).json(jsonResult);
+        return res.status(200).json(jsonResult);
     }
     else {
-        console.log("Keys:"+ keys)
+        console.log("creating new")
         keys.push(userkey);
-        console.log(keys);
-        var movielist=[];
-        var options = { method: 'GET',
+        console.log("new keys:"+keys);
+        
+        /*var options = { method: 'GET',
             url: 'https://api.themoviedb.org/3/discover/movie',
             qs: 
             { page: '1',
-             include_video: 'false',
-             include_adult: 'false',
              sort_by: 'popularity.desc',
-             language: 'en-US',
              api_key: '7678944848f7b822b6b11c2978c94dea' },
-            body: '{}' };
-        request(options, function(err, resp, body) {
+            body: '{}' };*/
+        var url="https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=7678944848f7b822b6b11c2978c94dea"
+        console.log("url"+url)
+        request(url, function(err, resp, body) {
+            if (err) res.status(300)
+            console.log("recieved new data");
             var moviestoqueue=[];
             var response = JSON.parse(body);
             for (x in response["results"]){
@@ -80,13 +83,15 @@ router.get('/checkKey', function(req, res, next) {
             movieQueue.push(moviestoqueue);
             for (i in movielist) allmovies.push(movielist[i]);
             for (i in moviestoqueue) allmovies.push(moviestoqueue[i])
+            console.log("movieDisplay:"+movieDisplay)
             pagecount.push(1);
         });
-        index=keys.indexOf(userkey);
+    }
+    index=keys.indexOf(userkey);
         jsonResult = movieDisplay[index];
         console.log("sending:"+jsonResult);
-        res.status(200).json(jsonResult);
-    }
+        console.log("could send:"+movielist)
+        return res.status(200).json(jsonResult);
 });
 router.get("/like", function(req, res, next) {
     var userkey = req.query['k'];
@@ -103,7 +108,7 @@ router.get("/delete", function(req, res, next) {
     console.log("deleting")
     var userkey = req.query['k'];
     var moviename = req.query['n'];
-    console.log("key:"+userkey+" name:"+moviename)
+    console.log("key:"+userkey+" name:"+moviename+" array:"+movieDisplay)
     var index = keys.indexOf(userkey);
     console.log("keys:"+keys+" index:"+index)
     for (i in movieDisplay[index]) {

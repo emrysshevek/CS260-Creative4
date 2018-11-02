@@ -61,7 +61,13 @@ app.controller('MainCtrl',
                 $http.get(url).then(function(response) {
                 console.log(response)
                 $scope.moviequeue=response["data"];
-            });
+                });
+            }
+            if($scope.moviequeue.length<10){
+                $http.get(url).then(function(response) {
+                console.log(response)
+                $scope.moviequeue=response["data"];
+                });
             }
             $scope.sessionName = "";
             $scope.info="";
