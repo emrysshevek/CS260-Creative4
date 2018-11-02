@@ -32,11 +32,12 @@ app.config([
 ]);
 
 app.factory("movieFactory", [function($http) {
-    
+
     var o = {
         movies: [],
         moviestoqueue: [],
-        moviepopup: []
+        moviepopup: [],
+        session: ""
     };
     return o;
 }]);
@@ -50,27 +51,27 @@ app.controller('MainCtrl',
         
         $scope.startSession = function() {
             console.log($scope.sessionName);
-            sessionkey=$scope.sessionName;
+            sessionkey = $scope.sessionName;
             var url = '/checkKey?k=' + sessionkey;
             console.log(url);
             $http.get(url).then(function(response) {
                 console.log(response)
-                $scope.moviequeue=response["data"];
+                $scope.moviequeue = response["data"];
             });
-            if($scope.moviequeue.length<10){
+            if ($scope.moviequeue.length < 10) {
                 $http.get(url).then(function(response) {
-                console.log(response)
-                $scope.moviequeue=response["data"];
-            });
+                    console.log(response)
+                    $scope.moviequeue = response["data"];
+                });
             }
             $scope.sessionName = "";
-            $scope.info="";
+            $scope.info = "";
         };
 
         $scope.check = function() {
             console.log("checking")
             console.log($scope.moviequeue)
-            
+
         };
     }
 );
@@ -78,22 +79,27 @@ app.controller('MainCtrl',
 app.controller('MovieCtrl',
     function($scope, $http, movieFactory) {
         console.log("Movie state");
-        $scope.moviequeue = movieFactory.movies;
+
+        $scope.movieQueue = movieFactory.movies;
         $scope.moviepopup=movieFactory.moviepopup;
-        console.log($scope.moviequeue);
+        // console.log(movieFactory.session);
+        // $scope.moviequeue = movieFactory.movies;
+        // $scope.movieToqueue = movieFactory.moviestoqueue;
+        // $scope.moviepopup = movieFactory.moviepopup;
+        // console.log($scope.moviequeue);
+
+        $scope.refresh = function() {
+            var url = '/checkKey?k=' + movieFactory.session;
+            $http.get(url).then(function(response) {
+                // console.log("Server Response");
+                $scope.movieQueue = response.data;
+                console.log("queue:" + $scope.movieQueue);
+            });
+            $scope.test = "MASON";
+        };
 
         $scope.init = function() {
-            console.log("init");
-            $scope.info = ""
-            $scope.moviequeue = [];
-            $scope.movieToqueue = [];
-            var url = '/checkKey?k=' + sessionkey;
-            $http.get(url).then(function(response) {
-                console.log(response)
-                $scope.moviequeue=response["data"];
-            });
-            console.log($scope.moviequeue);
-            $("#info").html = "";
+            $scope.refresh();
         };
 
         $scope.popup = function(movie) {
