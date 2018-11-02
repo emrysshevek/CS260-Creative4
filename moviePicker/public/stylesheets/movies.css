@@ -85,16 +85,19 @@
 
 .movie-list {
     list-style: none;
-    margin-left: 30%;
+    margin-left: 5%;
     margin-right: 7%;
+}
+.col{
+    margin-left: 25%;
 }
 
 .Avatar {
-    background-color: red;
+    background-color: blue;
     text-align: center;
     float: left;
     width: 13.5%;
-    outline: 3px solid red;
+    outline: 3px solid blue;
     position: relative;
     padding: 3px;
     margin: 5px;
@@ -108,27 +111,27 @@
 
 .Avatar p1 {
     position: absolute;
-    bottom: 3px;
+    bottom: -7px;
     left: 3px;
-    color: red;
-    font-size: medium;
+    color: blue;
+    font-size: 35px;
     margin: 3px;
     padding: 3px;
 }
 
 .Avatar p2 {
     position: absolute;
-    bottom: 3px;
+    bottom: 8px;
     right: 3px;
-    color: red;
-    font-size: medium;
+    color: blue;
+    font-size: 20px;
     margin: 3px;
     padding: 3px;
 }
 
 .previews {
     background-color: black;
-    outline: 3px solid red;
+    outline: 3px solid blue;
     width: 62%;
     min-height: 60%;
     position: fixed;
@@ -147,16 +150,17 @@
     position: absolute;
     top: 8px;
     left: 12px;
-    color: red;
+    color: blue;
     padding: 0;
     margin: 0;
+    font-size: 80px;
 }
 
 .previews .closebtn {
     position: absolute;
     top: 5px;
     right: 12px;
-    font-size: large;
+    font-size: 35px;
     color: red;
     margin: 0;
 }
@@ -165,7 +169,7 @@
     position: absolute;
     bottom: 20px;
     left: 8px;
-    color: red;
+    color: blue;
     text-size: medium;
 }
 
@@ -197,7 +201,7 @@
 
 /*}*/
 
-p {
+.col-md p {
     position: relative;
     /*top: 10%;*/
     /*text-shadow: -1.5px 0 2px black, 0 1.5px 2px black, 1.5px 0 2px black, 0 -1.5px 2px black;*/
@@ -211,12 +215,32 @@ p {
 
 .sidebar {
     position: absolute;
-    top: 0;
+    top: 120px;
     bottom: 0;
+    width:25%;
     /*left: 0;*/
     padding: 10px;
     /* Behind the navbar */
     /*padding: 48px 0 0;*/
     /* Height of navbar */
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+.sidebar p{
+    line-height: 80%;
+    margin:0;
+    padding: 0;
+    margin-top: 20px;
+    padding-left: 10px;
+    
+}
+.sidebar ul{
+    line-height:80%;
+}
+.squish{
+    line-height: 80%;
+}
+.inputform {
+    margin-left: 8px;
+    margin-top: 4px;
+    
 }

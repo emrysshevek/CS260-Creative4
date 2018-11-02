@@ -21,7 +21,7 @@
 
         <div class="mainBody">
             <nav class=" navbar navbar-expand-lg navbar-dark bg-dark ">
-                <a class="navbar-brand " href=" ">MOVIE NIGHT</a>
+                <a class="navbar-brand " href="#/main">MOVIE NIGHT</a>
                 <button class="navbar-toggler " type="button " data-toggle="collapse " data-target="#navbarSupportedContent " aria-controls="navbarSupportedContent " aria-expanded="false " aria-label="Toggle navigation "><span class="navbar-toggler-icon "></span></button>
 
                 <div class="collapse navbar-collapse " id="navbarSupportedContent ">
@@ -57,30 +57,35 @@
 
     <script type="text/ng-template " id="/movie.html ">
         <div class="container-fluid">
+            <nav class=" navbar navbar-header navbar-dark bg-dark ">
+                <a class="navbar-brand " href="#/main">MOVIE NIGHT</a>
+                <p class="navbar-text"><a href="#">Session ID: {{keyForSession}}</a></p>
+                <button class="navbar right" ng-click="refresh()">refresh</button>
+            </nav>
+                <form class="inputform">
+                    <input type="text" value="" placeholder="Search for Movies" ng-keyup="search()" name="movieSearchName" ng-model="movieSearchName">
+                </form>
+                <div class="sidebar">
+                <ul class="squish">
+                    <li ng-repeat="movie in searchmovies">
+                    <p ng-click="addMovie(movie)" style="cursor:pointer">{{movie.title}}</p>
+                    </li>
+                </ul>
+                </div>
+            
             <div class="row">
-                <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
-                    <div class="sidebar-sticky">
-                        <form name="formName" ng-keyup="search(formName)"
-                        <input class="form-control"  placeholder="Search" aria-label="Search" ng-model="formName.name">
-                        </form>
-                        <ul class="nav flex-column">
-                        <li ng-repeat='movie in searchmovies'>
-                            <p ng-click="addMovie(movie)" style="cursor:pointer">{{movie.title}}</p>
-                        </li>
-                        </ul>
-                    </div>
-                </nav>
+
                 <div class="col">
                     <ul class="movie-list " ng-init="init() ">
                         <li ng-repeat="movie in movieQueue|orderBy: '-upvotes' ">
                             <div class="Avatar ">
                                 <img ng-click="popup(movie) " ng-src='{{movie.nameimage}}' style="cursor:pointer " />
-                                <p1 ng-click="incrementUpvotes(movie) " style="cursor:pointer "><span class="glyphicon glyphicon-thumbs-up "> </p1>
+                                <p1 ng-click="incrementUpvotes(movie) " style="cursor:pointer ">^ </p1>
                                 <p2 ng-click="deleteMovie(movie) "style="cursor:pointer "> X</p2>
                             </div>
                         </li>
                     </ul>
-                    <p>{{sessionkey}}</p>
+                    
                     <ul class="movie-list " >
                         <li ng-repeat="preview in moviepopup ">
                             <div class="previews ">
@@ -91,6 +96,7 @@
                             </div>
                         </li>
                     </ul>
+                    
                 </div>
             </div>
         </div>

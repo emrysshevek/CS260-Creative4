@@ -4,7 +4,7 @@ var movieurl = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.d
 var pagenum = 1;
 var infotext = "IT'S MOVIE NIGHT, and you haven't yet decided on a movie, instead of randomly listing off movie names that you have already watch, let us help. Press start and we will give you a list of all movies based on popularity from there, if you decide you like it, you can press the thumbs up if you want to move it's position closer to the top, the 'x' to have it removed from the list, or the movie picture to view a description and other facts. At any time, you can press the start button to start the process over again. Enjoy!"
 var app = angular.module('app', ['ui.router']);
-var sessionkey;
+var sessionkey=0;
 
 app.config(function($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist(['**']);
@@ -36,7 +36,7 @@ app.factory("movieFactory", [function($http) {
     var o = {
         movies: [],
         moviepopup: [],
-        session: "",
+        session: 0,
         searchmovies:[]
     };
     return o;
@@ -50,9 +50,10 @@ app.controller('MainCtrl',
         $scope.moviepopup=movieFactory.moviepopup;
         $scope.keyForSession=movieFactory.session;
         $scope.startSession = function() {
-            console.log($scope.sessionName);
+            console.log("sessionkey:" +sessionkey+", "+$scope.keyForSession)
             sessionkey = $scope.sessionName;
             $scope.keyForSession=$scope.sessionName;
+            console.log("sessionkey:" +sessionkey+", "+$scope.keyForSession)
             var url = '/checkKey?k=' + sessionkey;
             console.log(url);
             $http.get(url).then(function(response) {
@@ -97,16 +98,27 @@ app.controller('MovieCtrl',
         // console.log($scope.moviequeue);
 
         $scope.refresh = function() {
-            var url = '/checkKey?k=' + movieFactory.session;
+            console.log("sessionkey:" +sessionkey+", "+$scope.keyForSession)
+            $scope.keyForSession=sessionkey;
+            var url = '/checkKey?k=' + sessionkey;
             $http.get(url).then(function(response) {
                 // console.log("Server Response");
                 $scope.movieQueue = response.data;
                 console.log("queue:" + $scope.movieQueue);
             });
             $scope.test = "MASON";
-            if($scope.movieQueue.length<5){
-                console.log("retry")
-                $scope.init();
+            if(!($scope.movieQueue[0])){
+                $http.get(url).then(function(response) {
+                    // console.log("Server Response");
+                    $scope.movieQueue = response.data;
+                    console.log("queue:" + $scope.movieQueue);
+                });
+                var start=new Date().getTime();
+                var end=start+700;
+                while (start<end){
+                    start=new Date().getTime();
+                }
+                console.log("retry queue:"+$scope.movieQueue)
             }
         };
 
@@ -115,19 +127,19 @@ app.controller('MovieCtrl',
         };
 
         $scope.popup = function(movie) {
-            console.log("in pop up")
-            console.log(movie)
+            $scope.refresh()
             $scope.moviepopup.push({
                 movie
             })
         };
 
         $scope.popdown = function() {
+            $scope.refresh();
             $scope.moviepopup.splice(0, 1)
         };
 
         $scope.incrementUpvotes = function(movie) {
-            var url = '/like?k=' + sessionkey+"&n="+movie.title;
+            var url = '/like?k=' + sessionkey+"&id="+movie.id;
             $http.get(url).then(function(response) {
                 console.log(response)
                 $scope.movieQueue=response["data"];
@@ -136,7 +148,7 @@ app.controller('MovieCtrl',
 
         $scope.deleteMovie = function(movie) {
             console.log("sessionkey:" +sessionkey+", "+$scope.keyForSession)
-            var url = '/delete?k=' + sessionkey+"&n="+movie.title;
+            var url = '/delete?k=' + sessionkey+"&id="+movie.id;
             $http.get(url).then(function(response) {
                 console.log(response)
                 $scope.movieQueue=response["data"];
@@ -144,11 +156,14 @@ app.controller('MovieCtrl',
         };
         $scope.search=function(movie){
             var url='/find?n='+$scope.movieSearchName;
+            console.log("searching:"+$scope.movieSearchName)
             $http.get(url).then(function(response){
                 $scope.searchmovies=response.data;
             })
+            console.log("search:"+$scope.searchmovies)
         }
         $scope.addMovie=function(movie){
+            console.log("sessionkey:" +sessionkey+", "+$scope.keyForSession)
             var url='/addMovie?k='+sessionkey+"&id="+movie.id;
             $http.get(url).then(function(response) {
                 console.log(response)
