@@ -68,7 +68,7 @@
                 </nav>
                 <div class="col">
                     <ul class="movie-list " ng-init="init() ">
-                        <li ng-repeat="movie in moviequeue|orderBy: '-upvotes' ">
+                        <li ng-repeat="movie in movieQueue|orderBy: '-upvotes' ">
                             <div class="Avatar ">
                                 <img ng-click="popup(movie) " ng-src='{{movie.nameimage}}' style="cursor:pointer " />
                                 <p1 ng-click="incrementUpvotes(movie) " style="cursor:pointer "><span class="glyphicon glyphicon-thumbs-up "> </p1>

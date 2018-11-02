@@ -89,9 +89,9 @@ app.controller('MovieCtrl',
             $http.get(url).then(function(response) {
                 // console.log("Server Response");
                 $scope.movieQueue = response.data;
-                console.log("queue:");
-                console.log($scope.movieQueue);
+                console.log("queue:" + $scope.movieQueue);
             });
+            $scope.test = "MASON";
         };
 
         $scope.init = function() {
